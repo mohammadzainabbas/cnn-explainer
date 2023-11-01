@@ -45,7 +45,7 @@ def get_model_weights(model) -> list:
             
             # Append the layer data to the list
             layers_data.append(layer_data)
-
+    return layers_data
 
 if __name__ == '__main__':
     # Load the model
