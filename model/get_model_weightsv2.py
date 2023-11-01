@@ -52,5 +52,7 @@ if __name__ == '__main__':
     model = tf.keras.models.load_model(join(Path(__file__).parent, 'cat_dog_detector_v1.h5'))
 
     # Get the weights
-    weights = model.get_weights()
+    weights = get_model_weights(model)
+
+    
 
