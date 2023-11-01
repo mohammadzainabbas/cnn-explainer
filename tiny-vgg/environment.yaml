@@ -1,0 +1,14 @@
+name: tiny-vgg
+channels:
+  - defaults
+dependencies:
+  - pip=20.0.2
+  - python=3.6.10
+  - pip:
+    - h5py==2.10.0
+    - numpy==1.18.3
+    - pandas==1.0.3
+    - scipy==1.4.1
+    - tensorflow==2.1.0
+    - tensorflow-cpu==2.1.0
+    - tensorflowjs==1.7.4
