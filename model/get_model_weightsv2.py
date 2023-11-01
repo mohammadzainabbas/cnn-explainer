@@ -15,25 +15,34 @@ def get_model_weights(model) -> list:
             input_shape = list(layer.input_shape)
             output_shape = list(layer.output_shape)
             num_neurons = layer.output_shape[-1]
-            
+
             # Get weights and biases
             weights, biases = layer.get_weights()
-            
+
+            # Debugging information
+            print(f'Layer: {layer_name}, Weights Shape: {weights.shape}')
+
             # Create a list to hold the weights for each neuron
             neurons_data = []
             for i in range(num_neurons):
-                # Get the weights for the current neuron
-                neuron_weights = weights[:,:,i] if len(weights.shape) == 3 else weights[:,i]
-                
+                # Adjust the indexing logic based on the dimensions of the weights tensor
+                if len(weights.shape) == 3:
+                    neuron_weights = weights[:,:,i]
+                elif len(weights.shape) == 2:
+                    neuron_weights = weights[:,i]
+                else:
+                    print(f'Unhandled weights shape: {weights.shape} in layer {layer_name}')
+                    continue  # Skip this neuron
+
                 # Create a dictionary for the current neuron
                 neuron_data = {
                     "bias": float(biases[i]),
                     "weights": neuron_weights.tolist()
                 }
-                
+
                 # Append the neuron data to the list
                 neurons_data.append(neuron_data)
-            
+
             # Create a dictionary for the current layer
             layer_data = {
                 "name": layer_name,
@@ -42,9 +51,10 @@ def get_model_weights(model) -> list:
                 "num_neurons": num_neurons,
                 "weights": neurons_data
             }
-            
+
             # Append the layer data to the list
             layers_data.append(layer_data)
+
     return layers_data
 
 if __name__ == '__main__':
