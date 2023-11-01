@@ -240,6 +240,7 @@ export const constructCNN = async (inputImageFile, model) => {
   // Load the image file
   let inputImageTensor = await getInputImageArray(inputImageFile, true);
 
+  debugger
   // Need to feed the model with a batch
   let inputImageTensorBatch = tf.stack([inputImageTensor]);
 
