@@ -2,17 +2,13 @@ import tensorflow as tf
 from pathlib import Path
 from os.path import join
 
-# Load the model
-model = tf.keras.models.load_model(join(Path(__file__).parent, 'cat_dog_detector_v1.h5'))
+def get_model_weights(model):
 
-# Get the weights
-weights = model.get_weights()
 
-# Convert to a serializable format
-import numpy as np
-serializable_weights = [w.tolist() for w in weights]
+if __name__ == '__main__':
+    # Load the model
+    model = tf.keras.models.load_model(join(Path(__file__).parent, 'cat_dog_detector_v1.h5'))
 
-# Save to a JSON file
-import json
-with open(join(Path(__file__).parent, 'weights.json'), 'w') as f:
-    json.dump(serializable_weights, f)
+    # Get the weights
+    weights = model.get_weights()
+
