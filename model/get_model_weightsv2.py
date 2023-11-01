@@ -14,7 +14,6 @@ def get_model_weights(model) -> list:
             layer_name = layer.name
             input_shape = list(layer.input_shape)
             output_shape = list(layer.output_shape)
-            num_neurons = layer.output_shape[-1]
 
             # Get weights and biases
             weights, biases = layer.get_weights()
@@ -24,24 +23,41 @@ def get_model_weights(model) -> list:
 
             # Create a list to hold the weights for each neuron
             neurons_data = []
-            for i in range(num_neurons):
-                # Adjust the indexing logic based on the dimensions of the weights tensor
-                if len(weights.shape) == 3:
+            
+            # Adjust the indexing logic based on the dimensions of the weights tensor
+            if len(weights.shape) == 4:
+                num_neurons = weights.shape[-1]
+                for i in range(num_neurons):
+                    filter_weights = weights[:,:,:,i]
+                    neuron_data = {
+                        "bias": float(biases[i]),
+                        "weights": filter_weights.tolist()
+                    }
+                    neurons_data.append(neuron_data)
+
+            elif len(weights.shape) == 3:
+                num_neurons = weights.shape[-1]
+                for i in range(num_neurons):
                     neuron_weights = weights[:,:,i]
-                elif len(weights.shape) == 2:
+                    neuron_data = {
+                        "bias": float(biases[i]),
+                        "weights": neuron_weights.tolist()
+                    }
+                    neurons_data.append(neuron_data)
+
+            elif len(weights.shape) == 2:
+                num_neurons = weights.shape[-1]
+                for i in range(num_neurons):
                     neuron_weights = weights[:,i]
-                else:
-                    print(f'Unhandled weights shape: {weights.shape} in layer {layer_name}')
-                    continue  # Skip this neuron
-
-                # Create a dictionary for the current neuron
-                neuron_data = {
-                    "bias": float(biases[i]),
-                    "weights": neuron_weights.tolist()
-                }
-
-                # Append the neuron data to the list
-                neurons_data.append(neuron_data)
+                    neuron_data = {
+                        "bias": float(biases[i]),
+                        "weights": neuron_weights.tolist()
+                    }
+                    neurons_data.append(neuron_data)
+                    
+            else:
+                print(f'Unhandled weights shape: {weights.shape} in layer {layer_name}')
+                continue  # Skip this neuron
 
             # Create a dictionary for the current layer
             layer_data = {
