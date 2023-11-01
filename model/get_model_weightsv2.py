@@ -54,5 +54,7 @@ if __name__ == '__main__':
     # Get the weights
     weights = get_model_weights(model)
 
-    
-
+    # Save to a JSON file
+    import json
+    with open(join(Path(__file__).parent, 'weights.json'), 'w') as f:
+        json.dump(weights, f)
